@@ -1,0 +1,100 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background: #000;
+  background-image: radial-gradient(circle at 50% 0%, #1a2332 0%, #0a0e17 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 40px 0;
+  /* Add padding to prevent touching edges */
+}
+
+.bgOrb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  z-index: 0;
+  animation: floatBg 20s infinite ease-in-out;
+}
+
+.bgOrb1 {
+  width: 400px;
+  height: 400px;
+  background: #3b82f6;
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.bgOrb2 {
+  width: 500px;
+  height: 500px;
+  background: #8b5cf6;
+  bottom: -150px;
+  right: -150px;
+  animation-delay: -5s;
+}
+
+.bgOrb3 {
+  width: 300px;
+  height: 300px;
+  background: #06b6d4;
+  top: 40%;
+  left: 20%;
+  animation-delay: -10s;
+  opacity: 0.2;
+}
+
+@keyframes floatBg {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  33% {
+    transform: translate(30px, 50px);
+  }
+
+  66% {
+    transform: translate(-20px, 20px);
+  }
+}
+
+.floatingMenuBtn {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 998;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
+}
+
+.floatingMenuBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.webContainer {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}

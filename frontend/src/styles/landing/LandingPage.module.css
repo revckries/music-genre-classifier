@@ -1,0 +1,563 @@
+.container {
+    width: 100%;
+    height: 100vh;
+    color: #fff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 120px 10% 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.heroContent {
+    max-width: 500px;
+    z-index: 2;
+}
+
+.heroTitle {
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #fff, #aebbf0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.heroSubtitle {
+    color: #888;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 400px;
+}
+
+.primaryBtn {
+    padding: 12px 30px;
+    background: #6c5ce7;
+    border-radius: 25px;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.primaryBtn:hover {
+    transform: scale(1.05);
+}
+
+.heroCard {
+    width: 350px;
+    height: 450px;
+    background: #111;
+    border-radius: 20px;
+    padding: 20px;
+    position: relative;
+    transform: rotate(-5deg);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border: 1px solid #222;
+    z-index: 1;
+    margin-right: 50px;
+}
+
+.heroCardImage {
+    width: 100%;
+    height: 70%;
+    background: linear-gradient(45deg, #ff00cc, #333399);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+/* Logos Strip */
+.logosStrip {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    padding: 40px 0;
+    opacity: 0.5;
+    border-bottom: 1px solid #222;
+}
+
+/* Wave Section (Parallax) */
+.waveSection {
+    position: relative;
+    padding: 100px 10%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.waveBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, rgba(108, 92, 231, 0.15) 0%, transparent 70%);
+}
+
+.waveGraphic {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    background: linear-gradient(90deg,
+            rgba(108, 92, 231, 0) 0%,
+            rgba(108, 92, 231, 0.2) 20%,
+            rgba(255, 107, 107, 0.2) 50%,
+            rgba(108, 92, 231, 0.2) 80%,
+            rgba(108, 92, 231, 0) 100%);
+    transform: translateY(-50%) skewY(-5deg);
+    filter: blur(40px);
+}
+
+.waveContent {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.waveText {
+    max-width: 700px;
+}
+
+.sectionTitle {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.waveCard {
+    width: 300px;
+    height: 300px;
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px;
+}
+
+/* Chat Section */
+.chatSection {
+    padding: 100px 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 80px;
+}
+
+.chatVisual {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.chatBubble {
+    background: #1a1a1a;
+    padding: 20px 30px;
+    border-radius: 20px;
+    max-width: 350px;
+    width: fit-content;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.chatBubble.right {
+    align-self: flex-end;
+    background: #2d2d2d;
+    text-align: right;
+    margin-right: 100px;
+}
+
+/* Mobile App Section */
+.appSection {
+    padding: 100px 10%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.phonesVisual {
+    position: relative;
+    width: 400px;
+    height: 500px;
+}
+
+.phone {
+    width: 220px;
+    height: 450px;
+    background: #111;
+    border: 4px solid #333;
+    border-radius: 30px;
+    position: absolute;
+    overflow: hidden;
+}
+
+.phone1 {
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.phone2 {
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    transform: translate(20px, 20px);
+    box-shadow: -20px 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Gems Section */
+.gemsSection {
+    padding: 100px 10%;
+    text-align: center;
+}
+
+.gemsGrid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+}
+
+.gemCard {
+    width: 180px;
+    height: 220px;
+    background: #111;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #222;
+    transition: transform 0.3s;
+}
+
+.gemCard:hover {
+    transform: translateY(-10px);
+    border-color: #6c5ce7;
+}
+
+.gemIcon {
+    width: 60px;
+    height: 60px;
+    background: #222;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* Chart Section */
+.chartSection {
+    padding: 100px 10%;
+}
+
+.chartContainer {
+    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+    border-radius: 30px;
+    padding: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #222;
+}
+
+.chartVisual {
+    width: 400px;
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.chartBar {
+    flex: 1;
+    background: #6c5ce7;
+    border-radius: 5px 5px 0 0;
+    opacity: 0.7;
+}
+
+/* Community Section */
+.communitySection {
+    padding: 100px 10%;
+}
+
+.communityGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.communityCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.communityCard:hover {
+    transform: translateY(-5px);
+    border-color: rgba(108, 92, 231, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.cardIcon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.communityCard h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.communityCard p {
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.6;
+}
+
+/* FAQ Section */
+.faqSection {
+    padding: 100px 10%;
+    background: #0d0d0d;
+    display: flex;
+    justify-content: space-between;
+}
+
+.faqList {
+    flex: 1;
+    max-width: 600px;
+}
+
+.faqItem {
+    border-bottom: 1px solid #222;
+    padding: 20px 0;
+}
+
+.faqQuestion {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.faqAnswer {
+    color: #888;
+    font-size: 14px;
+}
+
+/* Footer CTA */
+.footerCta {
+    padding: 50px 10%;
+    display: flex;
+    gap: 30px;
+}
+
+.ctaCard {
+    flex: 1;
+    height: 200px;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.ctaCard.artist {
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    color: #000;
+}
+
+.ctaCard.investor {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: #000;
+}
+
+.ctaBtn {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: #000;
+    color: #fff;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Footer */
+.mainFooter {
+    padding: 80px 10%;
+    border-top: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.footerCol h4 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.footerCol a {
+    display: block;
+    color: #666;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* Responsive Media Queries */
+
+@media (max-width: 1200px) {
+    .heroTitle {
+        font-size: 56px;
+    }
+
+    .sectionTitle {
+        font-size: 40px;
+    }
+
+    .chatSection,
+    .appSection,
+    .faqSection {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .chatVisual,
+    .phonesVisual {
+        width: 100%;
+        align-items: center;
+        margin-bottom: 50px;
+    }
+
+    .chatBubble.right {
+        margin-right: 0;
+        align-self: center;
+    }
+
+    .faqList {
+        max-width: 100%;
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding-top: 150px;
+    }
+
+    .heroCard {
+        margin-right: 0;
+        margin-top: 50px;
+    }
+
+    .waveContent {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .waveCard {
+        margin-top: 50px;
+    }
+
+    .chartContainer {
+        flex-direction: column;
+        padding: 40px;
+        text-align: center;
+    }
+
+    .chartVisual {
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .communityGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .footerCta {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px) {
+    .heroTitle {
+        font-size: 42px;
+    }
+
+    .sectionTitle {
+        font-size: 32px;
+    }
+
+    .heroCard {
+        width: 100%;
+        height: 400px;
+    }
+
+    .phonesVisual {
+        height: 400px;
+    }
+
+    .phone {
+        width: 180px;
+        height: 350px;
+    }
+
+    .gemsGrid {
+        gap: 15px;
+    }
+
+    .gemCard {
+        width: 140px;
+        height: 180px;
+    }
+
+    .mainFooter {
+        flex-direction: column;
+        gap: 30px;
+    }
+}

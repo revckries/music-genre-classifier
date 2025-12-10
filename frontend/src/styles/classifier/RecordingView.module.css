@@ -1,0 +1,97 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    padding: 40px 20px;
+    position: relative;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 400;
+    text-align: center;
+    color: #fff;
+    margin-top: 40px;
+}
+
+.waveContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.waveSvg {
+    width: 150%;
+    height: 100%;
+    transform: scaleY(0.8);
+    filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.4));
+}
+
+.timerContainer {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px 40px;
+    border-radius: 30px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timer {
+    font-family: monospace;
+    font-size: 24px;
+    color: #d8b4fe;
+    letter-spacing: 2px;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.stopButton {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.4);
+    position: relative;
+    transition: transform 0.2s;
+}
+
+.stopButton:active {
+    transform: scale(0.95);
+}
+
+.sideButton {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.2s;
+}
+
+.buttonLabel {
+    position: absolute;
+    bottom: -30px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+}
