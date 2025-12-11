@@ -25,7 +25,7 @@ Runs on: `http://localhost:3000`
 1. **Record Audio** - Capture music from your microphone
 2. **Process** - Backend extracts mel-spectrogram features
 3. **Classify** - GTZAN model predicts genre + confidence
-4. **History** - View past classifications and export data
+4. **History** - View past classifications 
 
 ## Supported Genres
 Blues, Classical, Country, Disco, Hip-Hop, Jazz, Metal, Pop, Reggae, Rock
@@ -49,7 +49,6 @@ Blues, Classical, Country, Disco, Hip-Hop, Jazz, Metal, Pop, Reggae, Rock
 - Progress tracking (10-100%)
 - Results display with confidence scores
 - Classification history with localStorage
-- Export to JSON/CSV
 
 ## Environment Variables
 
