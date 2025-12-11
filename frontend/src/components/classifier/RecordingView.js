@@ -34,9 +34,85 @@ const RecordingView = ({ onStop }) => {
                     }
                 };
 
-                mediaRecorderRef.current.onstop = () => {
-                    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-                    onStop(audioBlob);
+                // Helper: encode Float32Array audio buffer to 16-bit PCM WAV
+                function encodeWAV(samples, sampleRate, numChannels) {
+                    const buffer = new ArrayBuffer(44 + samples.length * 2);
+                    const view = new DataView(buffer);
+
+                    function writeString(view, offset, string) {
+                        for (let i = 0; i < string.length; i++) {
+                            view.setUint8(offset + i, string.charCodeAt(i));
+                        }
+                    }
+
+                    let offset = 0;
+                    writeString(view, offset, 'RIFF'); offset += 4;
+                    view.setUint32(offset, 36 + samples.length * 2, true); offset += 4;
+                    writeString(view, offset, 'WAVE'); offset += 4;
+                    writeString(view, offset, 'fmt '); offset += 4;
+                    view.setUint32(offset, 16, true); offset += 4; // subchunk1Size
+                    view.setUint16(offset, 1, true); offset += 2; // PCM
+                    view.setUint16(offset, numChannels, true); offset += 2;
+                    view.setUint32(offset, sampleRate, true); offset += 4;
+                    view.setUint32(offset, sampleRate * numChannels * 2, true); offset += 4; // byteRate
+                    view.setUint16(offset, numChannels * 2, true); offset += 2; // blockAlign
+                    view.setUint16(offset, 16, true); offset += 2; // bitsPerSample
+                    writeString(view, offset, 'data'); offset += 4;
+                    view.setUint32(offset, samples.length * 2, true); offset += 4;
+
+                    // Write PCM samples
+                    let pos = 44;
+                    for (let i = 0; i < samples.length; i++, pos += 2) {
+                        const s = Math.max(-1, Math.min(1, samples[i]));
+                        view.setInt16(pos, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+                    }
+
+                    return new Blob([view], { type: 'audio/wav' });
+                }
+
+                mediaRecorderRef.current.onstop = async () => {
+                    const recordedBlob = new Blob(audioChunksRef.current); // leave type unspecified
+
+                    // Try to convert to WAV client-side using AudioContext and resample to 22050 Hz
+                    try {
+                        const arrayBuffer = await recordedBlob.arrayBuffer();
+                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+                        const TARGET_SR = 22050;
+                        let processedBuffer = audioBuffer;
+
+                        if (Math.round(audioBuffer.sampleRate) !== TARGET_SR) {
+                            // Resample using OfflineAudioContext
+                            const offlineCtx = new OfflineAudioContext(audioBuffer.numberOfChannels, Math.ceil(audioBuffer.duration * TARGET_SR), TARGET_SR);
+                            const src = offlineCtx.createBufferSource();
+                            src.buffer = audioBuffer;
+                            src.connect(offlineCtx.destination);
+                            src.start(0);
+                            processedBuffer = await offlineCtx.startRendering();
+                        }
+
+                        // Interleave channels from processedBuffer
+                        const numChannels = processedBuffer.numberOfChannels;
+                        const length = processedBuffer.length * numChannels;
+                        const samples = new Float32Array(length);
+                        let offset = 0;
+                        for (let i = 0; i < processedBuffer.length; i++) {
+                            for (let ch = 0; ch < numChannels; ch++) {
+                                samples[offset++] = processedBuffer.getChannelData(ch)[i];
+                            }
+                        }
+
+                        const wavBlob = encodeWAV(samples, TARGET_SR, numChannels);
+                        const wavFile = new File([wavBlob], 'recording.wav', { type: 'audio/wav' });
+                        onStop(wavFile);
+                    } catch (err) {
+                        // Fallback: send original blob if conversion fails
+                        console.warn('Client-side WAV conversion failed, sending original blob:', err);
+                        const fallbackType = recordedBlob.type || 'audio/webm';
+                        const webmFile = new File([recordedBlob], 'recording.' + (fallbackType.split('/')[1] || 'webm'), { type: fallbackType });
+                        onStop(webmFile);
+                    }
 
                     // Stop all tracks to release microphone
                     stream.getTracks().forEach(track => track.stop());

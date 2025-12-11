@@ -17,6 +17,17 @@ export default function Home() {
   const [view, setView] = useState('landing'); // 'landing', 'home', 'recording', 'processing', 'history', 'features', 'genres', 'methodology'
   const [isMounted, setIsMounted] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
+  const [history, setHistory] = useState([]);
+
+  React.useEffect(() => {
+    // load history from localStorage if present
+    try {
+      const raw = localStorage.getItem('genre_history');
+      if (raw) setHistory(JSON.parse(raw));
+    } catch (e) {
+      console.warn('Failed to load history from localStorage', e);
+    }
+  }, []);
 
   React.useEffect(() => {
     setIsMounted(true);
@@ -27,6 +38,22 @@ export default function Home() {
   const handleStop = (blob) => {
     setAudioBlob(blob);
     setView('processing');
+  };
+  const handleProcessingComplete = (data) => {
+    try {
+      const item = {
+        id: Date.now(),
+        genre: data.genre,
+        confidence: data.confidence,
+        top_3: data.top_3,
+        timestamp: new Date().toISOString(),
+      };
+      const newHistory = [item, ...history];
+      setHistory(newHistory);
+      localStorage.setItem('genre_history', JSON.stringify(newHistory));
+    } catch (e) {
+      console.warn('Failed to save history', e);
+    }
   };
   const handleCancel = () => setView('home');
 
@@ -61,54 +88,54 @@ export default function Home() {
         <div className={styles.webContainer}>
           <AnimatePresence mode="wait">
             {view === 'home' && (
-              <motion.div
+                <motion.div
                 key="home"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                style={{ width: '100%', maxWidth: '800px', display: 'flex', justifyContent: 'center' }}
+                style={{ width: '100%', maxWidth: '1100px', display: 'flex', justifyContent: 'center' }}
               >
-                <HomeView onStart={handleStart} onHistory={() => setView('history')} />
+                <HomeView onStart={handleStart} onHistory={() => setView('history')} hasHistory={history.length > 0} onUpload={(file) => { setAudioBlob(file); setView('processing'); }} />
               </motion.div>
             )}
 
             {view === 'recording' && (
-              <motion.div
+                <motion.div
                 key="recording"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                style={{ width: '100%', maxWidth: '800px', display: 'flex', justifyContent: 'center' }}
+                style={{ width: '100%', maxWidth: '1100px', display: 'flex', justifyContent: 'center' }}
               >
                 <RecordingView onStop={handleStop} />
               </motion.div>
             )}
 
             {view === 'processing' && (
-              <motion.div
+                <motion.div
                 key="processing"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                style={{ width: '100%', maxWidth: '800px', display: 'flex', justifyContent: 'center' }}
+                style={{ width: '100%', maxWidth: '1100px', display: 'flex', justifyContent: 'center' }}
               >
-                <ProcessingView onCancel={handleCancel} audioBlob={audioBlob} />
+                <ProcessingView onCancel={handleCancel} audioBlob={audioBlob} onProcessingComplete={(data) => { handleProcessingComplete(data); }} />
               </motion.div>
             )}
 
             {view === 'history' && (
-              <motion.div
+                <motion.div
                 key="history"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                style={{ width: '100%', maxWidth: '800px', display: 'flex', justifyContent: 'center' }}
+                style={{ width: '100%', maxWidth: '1100px', display: 'flex', justifyContent: 'center' }}
               >
-                <HistoryView onBack={handleCancel} />
+                <HistoryView onBack={handleCancel} history={history} onClearHistory={() => { setHistory([]); localStorage.removeItem('genre_history'); setView('home'); }} />
               </motion.div>
             )}
           </AnimatePresence>
