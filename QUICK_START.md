@@ -23,7 +23,7 @@ Backend runs at:
 ### Frontend (Terminal 2)
 
 ```powershell
-cd -music-genre-classifier/frontend
+cd frontend
 npm install
 npm run dev
 ```
@@ -53,7 +53,7 @@ Backend runs at:
 ### Frontend (Terminal 2)
 
 ```bash
-cd -music-genre-classifier/frontend
+cd frontend
 npm install
 npm run dev
 ```

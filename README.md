@@ -1,6 +1,7 @@
 # 🎵 Music Genre Classifier
 
 A deep learning web application that classifies music genres from audio recordings using a pre-trained GTZAN model.  
+
 This project consists of a **Flask backend API** for audio processing and inference, and a **Next.js frontend** for user interaction.
 
 ---
@@ -20,7 +21,7 @@ The system is cross-platform and can run on **Windows, macOS, and Linux**.
 
 ## 🧠 Model Information
 
-- **Model file**: `gtzan_model.keras`
+- **Model file**: `models/gtzan_model.keras`
 - **Dataset**: GTZAN
 - **Number of genres**: 10
 
@@ -38,23 +39,33 @@ The model outputs:
 
 ```
 
-Final_Project/
-├── gtzan_model.keras
+music-genre-classifier/
 ├── backend/
+│   ├── uploads/
 │   ├── app.py
-│   ├── requirements.txt
-│   └── start.sh
-├── -music-genre-classifier/
-│   ├── frontend/
-│   │   ├── src/app/page.js
-│   │   ├── src/components/classifier/
-│   │   │   ├── ProcessingView.js
-│   │   │   ├── HistoryView.js
-│   │   │   └── HomeView.js
-│   │   ├── .env.local
-│   │   └── package.json
-├── README.md
-└── QUICK_START.md
+│   └── requirements.txt
+├── frontend/
+│   ├── node_modules/
+│   ├── public/
+│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   └── styles/
+│   ├── .gitignore
+│   ├── eslint.config.mjs
+│   ├── jsconfig.json
+│   ├── next.config.mjs
+│   ├── package-lock.json
+│   └── package.json
+├── models/
+│   └── gtzan_model.keras
+├── training/
+│   ├── data/
+│   └── notebooks/
+├── .gitignore
+├── package-lock.json
+├── QUICK_START.md
+└── README.md
 
 ````
 
@@ -77,7 +88,7 @@ Backend runs at:
 ### Frontend
 
 ```bash
-cd -music-genre-classifier/frontend
+cd frontend
 npm install
 npm run dev
 ```
@@ -133,7 +144,7 @@ Restart the frontend after updating this file.
   ```bash
   python -c "import tensorflow; print(tensorflow.__version__)"
   ```
-* Ensure `gtzan_model.keras` exists in the project root
+* Ensure `gtzan_model.keras` exists in the `models/` folder
 
 ### Frontend cannot connect to backend
 
