@@ -10,8 +10,8 @@
     max-width: 1100px;
     margin: 0 auto;
     border-radius: 14px;
-    background: rgba(255,255,255,0.02);
-    box-shadow: 0 8px 30px rgba(2,6,23,0.06);
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 8px 30px rgba(2, 6, 23, 0.06);
     font-family: 'Poppins', sans-serif;
 }
 
@@ -93,6 +93,7 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    margin-top: 40px;
     margin-bottom: 20px;
     width: 100%;
 }
@@ -128,12 +129,59 @@
 }
 
 /* Result view styling */
+.resultContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1100px;
+    margin: 10px auto 0 auto;
+    padding: 40px 20px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar for result container */
+.resultContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+.resultContainer::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.resultContainer::-webkit-scrollbar-thumb {
+    background: rgba(108, 92, 231, 0.5);
+    border-radius: 4px;
+}
+
+.resultContainer::-webkit-scrollbar-thumb:hover {
+    background: rgba(108, 92, 231, 0.7);
+}
+
 .resultHeader {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 32px;
+    gap: 12px;
+    margin-bottom: 24px;
     width: 100%;
+}
+
+.resultContent {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+/* Responsive: stack on smaller screens */
+@media (max-width: 768px) {
+    .resultContent {
+        grid-template-columns: 1fr;
+    }
 }
 
 .resultTitle {
@@ -151,13 +199,17 @@
     border: 1px solid rgba(108, 92, 231, 0.3);
     padding: 32px;
     border-radius: 16px;
-    margin-bottom: 32px;
+    margin-bottom: 0;
     backdrop-filter: blur(10px);
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .genreValue {
-    font-size: 36px;
+    font-size: 48px;
     font-weight: 700;
     background: linear-gradient(135deg, #6c5ce7, #06b6d4);
     -webkit-background-clip: text;
@@ -176,9 +228,9 @@
 }
 
 .genreLabel {
-    font-size: 12px;
+    font-size: 14px;
     color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 500;
@@ -186,7 +238,7 @@
 
 
 .confidenceLabel {
-    font-size: 12px;
+    font-size: 14px;
     color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -202,21 +254,21 @@
 }
 
 .confidenceValue {
-    font-size: 36px;
+    font-size: 48px;
     font-weight: 700;
     color: #fff;
 }
 
 .predictionsSection {
-    margin-bottom: 32px;
+    margin-bottom: 0;
     width: 100%;
 }
 
 .predictionsTitle {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -224,9 +276,9 @@
 .predictionItem {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 14px 16px;
+    padding: 16px 18px;
     border-radius: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     transition: all 0.2s;
 }
 
@@ -242,14 +294,14 @@
 }
 
 .predictionName {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: #fff;
     text-transform: capitalize;
 }
 
 .predictionPercent {
-    font-size: 13px;
+    font-size: 15px;
     color: rgba(255, 255, 255, 0.6);
     font-weight: 500;
 }
@@ -286,4 +338,3 @@
     border-left: 4px solid #ef4444;
     width: 100%;
 }
-

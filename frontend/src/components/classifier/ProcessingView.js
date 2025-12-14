@@ -95,35 +95,39 @@ if (result && !isProcessing) {
                 <h1 className={styles.resultTitle}>Classification Complete!</h1>
             </div>
 
-            <div className={styles.genreCard}>
-                <p className={styles.genreLabel}>Detected Genre</p>
-                <p className={styles.genreValue}>{result.genre}</p>
-                
-                <div className={styles.confidenceSection}>
-                    <span className={styles.confidenceLabel}>Confidence:</span>
-                    <span className={styles.confidenceValue}>{(result.confidence * 100).toFixed(1)}%</span>
+            <div className={styles.resultContent}>
+                {/* Left Column - Detected Genre */}
+                <div className={styles.genreCard}>
+                    <p className={styles.genreLabel}>Detected Genre</p>
+                    <p className={styles.genreValue}>{result.genre}</p>
+                    
+                    <div className={styles.confidenceSection}>
+                        <span className={styles.confidenceLabel}>Confidence:</span>
+                        <span className={styles.confidenceValue}>{(result.confidence * 100).toFixed(1)}%</span>
+                    </div>
                 </div>
-            </div>
 
-            {result.top_3 && result.top_3.length > 0 && (
-                <div className={styles.predictionsSection}>
-                    <h3 className={styles.predictionsTitle}>Top 3 Predictions</h3>
-                    {result.top_3.map((item, idx) => (
-                        <div key={idx} className={styles.predictionItem}>
-                            <div className={styles.predictionLabel}>
-                                <span className={styles.predictionName}>{item[0]}</span>
-                                <span className={styles.predictionPercent}>{(item[1] * 100).toFixed(1)}%</span>
+                {/* Right Column - Top 3 Predictions */}
+                {result.top_3 && result.top_3.length > 0 && (
+                    <div className={styles.predictionsSection}>
+                        <h3 className={styles.predictionsTitle}>Top 3 Predictions</h3>
+                        {result.top_3.map((item, idx) => (
+                            <div key={idx} className={styles.predictionItem}>
+                                <div className={styles.predictionLabel}>
+                                    <span className={styles.predictionName}>{item[0]}</span>
+                                    <span className={styles.predictionPercent}>{(item[1] * 100).toFixed(1)}%</span>
+                                </div>
+                                <div className={styles.predictionBar}>
+                                    <div 
+                                        className={styles.predictionBarFill}
+                                        style={{ width: `${item[1] * 100}%` }}
+                                    />
+                                </div>
                             </div>
-                            <div className={styles.predictionBar}>
-                                <div 
-                                    className={styles.predictionBarFill}
-                                    style={{ width: `${item[1] * 100}%` }}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+                        ))}
+                    </div>
+                )}
+            </div>
 
             <div className={styles.controls}>
                 <button className={styles.resultButton} onClick={onCancel}>
