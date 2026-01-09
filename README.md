@@ -1,32 +1,42 @@
 # 🎵 Music Genre Classifier
 
-A deep learning web application that classifies music genres from audio recordings using a CNN-BiLSTM model trained on the GTZAN dataset.
+A deep learning web application that classifies music genres from audio recordings using a **CNN-BiLSTM** model trained on the **GTZAN Music Genre Dataset**.
 
-**Live Demo**: [https://music-genrify.vercel.app/]
-**Backend API**: [https://revckries-music-backend.hf.space]
+- **Live Demo**: https://music-genrify.vercel.app/  
+- **Backend API**: https://revckries-music-backend.hf.space
+
 ---
 
 ## 📌 Overview
 
-This application allows users to:
+Music Genre Classification is a classic problem in **Music Information Retrieval (MIR)**.
+This project explores the combination of **Convolutional Neural Networks (CNN)** and
+**Bidirectional LSTM (BiLSTM)** to capture both **spectral** and **temporal** patterns in music signals.
+
+The application allows users to:
 - 🎙️ Record music directly from the browser
 - 🎵 Upload audio files for classification
-- 🤖 Classify music into 10 different genres using deep learning
-- 📊 View prediction confidence and top 3 predictions
+- 🤖 Classify music into **10 genres** using deep learning
+- 📊 View prediction confidence and **Top-3 predictions**
 - 📈 Track classification history
 
-### Supported Genres
+### 🎶 Supported Genres
 Blues, Classical, Country, Disco, Hip-Hop, Jazz, Metal, Pop, Reggae, Rock
 
 ---
 
 ## 🧠 Model Information
 
-- **Architecture**: CNN-BiLSTM
-- **Optimizer**: AdamW (with Adam comparison)
-- **Dataset**: GTZAN Music Genre Dataset
-- **Input**: Mel-spectrogram features
-- **Output**: 10 genre classes with confidence scores
+- **Architecture**: CNN-BiLSTM  
+- **Optimizer**: AdamW (with Adam comparison during training)  
+- **Dataset**: [GTZAN Music Genre Dataset](https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification)
+- **Input Features**: Mel-Spectrogram  
+- **Output**: 10 genre classes with confidence scores  
+
+### Why CNN-BiLSTM?
+- **CNN** extracts local time-frequency patterns from mel-spectrograms  
+- **BiLSTM** captures long-term temporal dependencies in music  
+- The combination improves genre classification performance compared to CNN-only models
 
 ---
 
@@ -36,117 +46,120 @@ Blues, Classical, Country, Disco, Hip-Hop, Jazz, Metal, Pop, Reggae, Rock
 
 #### Prerequisites
 - Hugging Face account
-- Trained model file (`gtzan_model.keras`)
+- Trained model file: `gtzan_model.keras`
 
-#### Steps:
+#### Steps
 
 1. **Create a New Space**
-   - Go to [Hugging Face Spaces](https://huggingface.co/spaces)
-   - Click "Create new Space"
+   - Go to https://huggingface.co/spaces
+   - Click **Create new Space**
    - Choose **Docker** as the SDK
    - Name your space (e.g., `music-backend`)
 
-2. **Upload Files**
-   ```
-   backend/
-   ├── app.py
-   ├── Dockerfile
-   ├── requirements.txt
-   └── models/
-       └── gtzan_model.keras
-   ```
+2. **Project Structure**
+```
+
+backend/
+├── app.py
+├── Dockerfile
+├── requirements.txt
+└── models/
+└── gtzan_model.keras
+
+````
 
 3. **Important Notes**
-   - The `Dockerfile` is already configured for port **7860** (Hugging Face requirement)
-   - Model file should be in `backend/models/gtzan_model.keras`
-   - Space will auto-build and deploy
+- Hugging Face Spaces requires port **7860** (already configured)
+- Model file must be located at `backend/models/gtzan_model.keras`
+- The Space will auto-build and deploy
 
-4. **Get Your API URL**
-   - Your API will be available at: `https://revckries-music-backend.hf.space`
-   - Test it: `https://revckries-music-backend.hf.space/health`
+4. **API URL**
+- Base URL: https://revckries-music-backend.hf.space
+- Health check: https://revckries-music-backend.hf.space/health
 
-#### Update Model Later:
+#### Updating the Model
 ```bash
-# Option 1: Via Hugging Face UI
-# - Go to your Space → Files → backend/models/
-# - Upload new gtzan_model.keras
-# - Space will auto-restart
+# Option 1: Upload via Hugging Face UI
+# Space → Files → backend/models/ → upload new gtzan_model.keras
 
-# Option 2: Via Git
+# Option 2: Git-based update
 git clone https://huggingface.co/spaces/revckries/music-backend
 cd music-backend
 cp /path/to/new/gtzan_model.keras backend/models/
 git add backend/models/gtzan_model.keras
 git commit -m "Update model"
 git push
-```
+````
 
 ---
 
 ### 🔵 Frontend Deployment (Vercel)
 
 #### Prerequisites
-- Vercel account
-- GitHub repository
 
-#### Steps:
+* Vercel account
+* GitHub repository
 
-1. **Push to GitHub**
+#### Steps
+
+1. **Push Code to GitHub**
+
    ```bash
    git add .
    git commit -m "Initial commit"
    git push origin main
    ```
 
-2. **Deploy to Vercel**
-   - Go to [Vercel](https://vercel.com)
-   - Click "New Project"
-   - Import your GitHub repository (`revckries/music-genre-classifier`)
-   - Configure:
-     - **Framework Preset**: Next.js
-     - **Root Directory**: `frontend`
-     - **Build Command**: `npm run build`
-     - **Output Directory**: `.next`
+2. **Deploy on Vercel**
 
-3. **Set Environment Variables**
-   In Vercel dashboard → Settings → Environment Variables:
-   ```
+   * Go to [https://vercel.com](https://vercel.com)
+   * Click **New Project**
+   * Import repository: `revckries/music-genre-classifier`
+   * Configuration:
+
+     * **Framework Preset**: Next.js
+     * **Root Directory**: `frontend`
+     * **Build Command**: `npm run build`
+     * **Output Directory**: `.next`
+
+3. **Environment Variables**
+   In Vercel Dashboard → Settings → Environment Variables:
+
+   ```env
    NEXT_PUBLIC_API_URL=https://revckries-music-backend.hf.space
    ```
 
 4. **Deploy**
-   - Click "Deploy"
-   - Vercel will auto-deploy on every push to `main`
 
-#### Update Backend URL:
-```bash
-# If you change backend URL later:
-# 1. Update in Vercel dashboard → Settings → Environment Variables
-# 2. Redeploy (automatic or manual trigger)
-```
+   * Click **Deploy**
+   * Frontend auto-deploys on every push to `main`
 
 ---
 
 ## 💻 Local Development
 
 ### Backend (Flask)
+
 ```bash
 cd backend
 pip install -r requirements.txt
 python app.py
 ```
-Backend runs at: http://localhost:5000
+
+Backend runs at: [http://localhost:5000](http://localhost:5000)
 
 ### Frontend (Next.js)
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Frontend runs at: http://localhost:3000
 
-**Local Environment Setup:**
+Frontend runs at: [http://localhost:3000](http://localhost:3000)
+
 Create `frontend/.env.local`:
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
@@ -155,22 +168,22 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 
 ## 🔌 API Endpoints
 
-| Method | Endpoint   | Description                    |
-|--------|------------|--------------------------------|
-| GET    | `/`        | API status and available routes|
-| GET    | `/health`  | Health check                   |
-| POST   | `/predict` | Classify audio file            |
-| GET    | `/genres`  | Get list of supported genres   |
+| Method | Endpoint   | Description              |
+| ------ | ---------- | ------------------------ |
+| GET    | `/`        | API status and routes    |
+| GET    | `/health`  | Health check             |
+| POST   | `/predict` | Classify audio file      |
+| GET    | `/genres`  | Get supported genre list |
 
-### Example Request:
-You can test the API directly from your terminal using `curl` (replace `audio.mp3` with your file):
+### Example Request
 
 ```bash
 curl -X POST https://revckries-music-backend.hf.space/predict \
   -F "file=@audio.mp3"
 ```
 
-### Example Response:
+### Example Response
+
 ```json
 {
   "genre": "jazz",
@@ -185,79 +198,79 @@ curl -X POST https://revckries-music-backend.hf.space/predict \
 
 ---
 
-## 🎓 Training the Model
+## 🎓 Model Training
 
-The training notebook is located in `training/notebooks/training.ipynb`.
+Training notebook:
 
-### Features:
-- ✅ Exploratory Data Analysis (EDA)
-- ✅ Adam vs AdamW optimizer comparison
-- ✅ Data augmentation
-- ✅ Model evaluation and metrics
+```
+training/notebooks/training.ipynb
+```
 
-### To Retrain:
+### Training Features
+
+* Exploratory Data Analysis (EDA)
+* Adam vs AdamW optimizer comparison
+* Data augmentation
+* Model evaluation and metrics
+
+### Retraining Steps
+
 ```bash
-# 1. Open training.ipynb in Jupyter
+# 1. Open training.ipynb
 # 2. Run all cells
-# 3. Model will be saved as gtzan_model.keras
-# 4. Upload to Hugging Face Space (see Backend Deployment)
+# 3. Model saved as gtzan_model.keras
+# 4. Upload model to Hugging Face Space
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Backend:**
-- Flask
-- TensorFlow/Keras
-- Librosa
-- NumPy
-
-**Frontend:**
-- Next.js
-- React
-- TailwindCSS
-- Axios
-
-**Deployment:**
-- Hugging Face Spaces (Backend)
-- Vercel (Frontend)
+| Category    | Tools & Frameworks                              |
+|------------|------------------------------------------------|
+| Backend    | Flask, TensorFlow/Keras, Librosa, NumPy        |
+| Frontend   | Next.js, React, Tailwind CSS, Axios            |
+| Deployment | Hugging Face Spaces, Vercel                    |
 
 ---
 
 ## 📝 Notes
 
-- Model file (`gtzan_model.keras`) is **not** pushed to GitHub (too large)
-- Model is only stored in Hugging Face Spaces
-- Frontend auto-deploys on GitHub push
-- Backend requires manual model upload to Hugging Face
+* Model file (`gtzan_model.keras`) is not pushed to GitHub due to size limits
+* Model is stored and served via Hugging Face Spaces
+* Frontend auto-deploys on every GitHub push
+* Backend model updates require re-upload to Hugging Face
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Backend Issues:
-- **Model not found**: Ensure `gtzan_model.keras` is in `backend/models/`
-- **Port error**: Hugging Face requires port 7860 (already configured)
-- **Memory error**: Hugging Face free tier has memory limits
+### Backend
 
-### Frontend Issues:
-- **CORS error**: Check `NEXT_PUBLIC_API_URL` in Vercel environment variables
-- **API not responding**: Verify Hugging Face Space is running
-- **Build failed**: Check `frontend` is set as root directory in Vercel
+* **Model not found**: Ensure `gtzan_model.keras` exists in `backend/models/`
+* **Port error**: Hugging Face requires port 7860
+* **Memory issue**: Free tier has RAM limitations
+
+### Frontend
+
+* **CORS error**: Check `NEXT_PUBLIC_API_URL`
+* **API not responding**: Ensure Hugging Face Space is running
+* **Build failed**: Verify `frontend` is set as root directory in Vercel
 
 ---
 
 ## 👥 Contributors
 
-1. Christine Kosasih
-2. Gisella Jayata
-3. Vellyn Angeline
+* Christine Kosasih
+* Gisella Jayata
+* Vellyn Angeline
 
 ---
 
 ## 🔗 Links
 
-- [Live Demo](https://music-genrify.vercel.app/)
-- [Backend API](https://revckries-music-backend.hf.space)
-- [GitHub Repository](https://github.com/revckries/music-genre-classifier)
+* Live Demo: [https://music-genrify.vercel.app/](https://music-genrify.vercel.app/)
+* Backend API: [https://revckries-music-backend.hf.space](https://revckries-music-backend.hf.space)
+* GitHub Repository: [https://github.com/revckries/music-genre-classifier](https://github.com/revckries/music-genre-classifier)
+
+```
