@@ -10,7 +10,7 @@ from pydub import AudioSegment
 from pydub.utils import which as pydub_which
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'wav', 'mp3', 'ogg', 'flac', 'm4a', 'webm'}
@@ -128,22 +128,45 @@ def extract_melspectrogram(audio_data, sample_rate=22050, duration=30.0, format_
         n_samples = int(sample_rate * duration)
         
         if len(audio) < n_samples:
-            audio = np.pad(audio, (0, n_samples - len(audio)))
-        else:
-            audio = audio[:n_samples]
+            # Improved logic for short clips:
+            # Instead of padding with silence (which confuses the model),
+            # we TILE (repeat) the audio to fill the 30-second window.
+            # This preserves the genre's texture and statistical distribution.
+            tile_factor = int(np.ceil(n_samples / len(audio)))
+            audio = np.tile(audio, tile_factor)[:n_samples]
+        elif len(audio) > n_samples:
+             audio = audio[:n_samples]
+
+        # Waveform Normalization (Auto-Gain)
+        if np.max(np.abs(audio)) > 0:
+            audio = audio / np.max(np.abs(audio))
         
+        # --- ENHANCEMENT: Harmonic-Percussive Source Separation ---
+        # Separating harmonic (melody) and percussive (beat) elements helps the model
+        # focus on distinct genre characteristics even in lower quality recordings.
+        # We use the sum of harmonic and percussive components to reinforce signal.
+        try:
+            y_harmonic, y_percussive = librosa.effects.hpss(audio)
+            audio = y_harmonic + y_percussive
+        except Exception:
+            pass # Fallback to original audio if separation fails
+            
         mel_spec = librosa.feature.melspectrogram(
             y=audio, sr=sample_rate, n_mels=128, n_fft=2048, hop_length=512
         )
         
         mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
-        mel_spec_db = (mel_spec_db - mel_spec_db.mean()) / mel_spec_db.std()
         
-        if mel_spec_db.shape[1] < 1292:
-            pad_width = 1292 - mel_spec_db.shape[1]
-            mel_spec_db = np.pad(mel_spec_db, ((0, 0), (0, pad_width)))
+        # Normalize (standardization)
+        mel_spec_db = (mel_spec_db - np.mean(mel_spec_db)) / (np.std(mel_spec_db) + 1e-9)
+        
+        # Ensure exact shape (sometimes rounding errors give +/- 1 frame)
+        EXPECTED_FRAMES = 1292
+        if mel_spec_db.shape[1] < EXPECTED_FRAMES:
+             pad_width = EXPECTED_FRAMES - mel_spec_db.shape[1]
+             mel_spec_db = np.pad(mel_spec_db, ((0, 0), (0, pad_width)), mode='wrap')
         else:
-            mel_spec_db = mel_spec_db[:, :1292]
+             mel_spec_db = mel_spec_db[:, :EXPECTED_FRAMES]
         
         return mel_spec_db[..., np.newaxis]
     except Exception as e:
@@ -194,8 +217,10 @@ def health():
 
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['POST', 'OPTIONS'])
 def predict():
+    if request.method == 'OPTIONS':
+        return jsonify({}), 200
     try:
         if 'audio' not in request.files:
             return jsonify({'error': 'No audio file provided'}), 400

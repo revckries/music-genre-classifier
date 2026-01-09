@@ -12,7 +12,7 @@ const ProcessingView = ({ onCancel, audioBlob, onProcessingComplete }) => {
     const [sentFallback, setSentFallback] = useState(false);
 
     // API endpoint - make sure backend is running on localhost:5000
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5000';
 
     useEffect(() => {
         if (audioBlob && !isProcessing) {
@@ -51,8 +51,20 @@ const ProcessingView = ({ onCancel, audioBlob, onProcessingComplete }) => {
 
             console.log("Sending audio to backend...", audioBlob.size, "bytes");
 
+            // Construct URL safely
+            let baseUrl = API_BASE_URL;
+            if (!baseUrl) {
+                // Fallback if env var is missing
+                baseUrl = 'http://localhost:5000';
+            }
+            // Remove trailing slash
+            baseUrl = baseUrl.replace(/\/$/, "");
+
+            const endpoint = `${baseUrl}/predict`;
+            console.log("Posting to:", endpoint);
+
             // Send to backend
-            const response = await fetch(`${API_BASE_URL}/predict`, {
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 body: formData,
             });
@@ -66,7 +78,7 @@ const ProcessingView = ({ onCancel, audioBlob, onProcessingComplete }) => {
 
             const data = await response.json();
             console.log("Prediction result:", data);
-            
+
             setProgress(100);
             setResult(data);
 
@@ -85,86 +97,86 @@ const ProcessingView = ({ onCancel, audioBlob, onProcessingComplete }) => {
     };
 
     // Show result view
-// Show result view
-if (result && !isProcessing) {
-    return (
-        <div className={styles.resultContainer}>
-            <div className={styles.resultHeader}>
-                <CheckCircle size={32} color="#6c5ce7" />
+    // Show result view
+    if (result && !isProcessing) {
+        return (
+            <div className={styles.resultContainer}>
+                <div className={styles.resultHeader}>
+                    <CheckCircle size={32} color="#6c5ce7" />
 
-                <h1 className={styles.resultTitle}>Classification Complete!</h1>
-            </div>
-
-            <div className={styles.resultContent}>
-                {/* Left Column - Detected Genre */}
-                <div className={styles.genreCard}>
-                    <p className={styles.genreLabel}>Detected Genre</p>
-                    <p className={styles.genreValue}>{result.genre}</p>
-                    
-                    <div className={styles.confidenceSection}>
-                        <span className={styles.confidenceLabel}>Confidence:</span>
-                        <span className={styles.confidenceValue}>{(result.confidence * 100).toFixed(1)}%</span>
-                    </div>
+                    <h1 className={styles.resultTitle}>Classification Complete!</h1>
                 </div>
 
-                {/* Right Column - Top 3 Predictions */}
-                {result.top_3 && result.top_3.length > 0 && (
-                    <div className={styles.predictionsSection}>
-                        <h3 className={styles.predictionsTitle}>Top 3 Predictions</h3>
-                        {result.top_3.map((item, idx) => (
-                            <div key={idx} className={styles.predictionItem}>
-                                <div className={styles.predictionLabel}>
-                                    <span className={styles.predictionName}>{item[0]}</span>
-                                    <span className={styles.predictionPercent}>{(item[1] * 100).toFixed(1)}%</span>
-                                </div>
-                                <div className={styles.predictionBar}>
-                                    <div 
-                                        className={styles.predictionBarFill}
-                                        style={{ width: `${item[1] * 100}%` }}
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                <div className={styles.resultContent}>
+                    {/* Left Column - Detected Genre */}
+                    <div className={styles.genreCard}>
+                        <p className={styles.genreLabel}>Detected Genre</p>
+                        <p className={styles.genreValue}>{result.genre}</p>
+
+                        <div className={styles.confidenceSection}>
+                            <span className={styles.confidenceLabel}>Confidence:</span>
+                            <span className={styles.confidenceValue}>{(result.confidence * 100).toFixed(1)}%</span>
+                        </div>
                     </div>
-                )}
+
+                    {/* Right Column - Top 3 Predictions */}
+                    {result.top_3 && result.top_3.length > 0 && (
+                        <div className={styles.predictionsSection}>
+                            <h3 className={styles.predictionsTitle}>Top 3 Predictions</h3>
+                            {result.top_3.map((item, idx) => (
+                                <div key={idx} className={styles.predictionItem}>
+                                    <div className={styles.predictionLabel}>
+                                        <span className={styles.predictionName}>{item[0]}</span>
+                                        <span className={styles.predictionPercent}>{(item[1] * 100).toFixed(1)}%</span>
+                                    </div>
+                                    <div className={styles.predictionBar}>
+                                        <div
+                                            className={styles.predictionBarFill}
+                                            style={{ width: `${item[1] * 100}%` }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className={styles.controls}>
+                    <button className={styles.resultButton} onClick={onCancel}>
+                        Try Again
+                    </button>
+                </div>
             </div>
+        );
+    }
 
-            <div className={styles.controls}>
-                <button className={styles.resultButton} onClick={onCancel}>
-                    Try Again
-                </button>
+    // Show error state
+    if (error && !isProcessing) {
+        return (
+            <div className={styles.resultContainer}>
+                <div className={styles.resultHeader}>
+                    <AlertCircle size={32} color="#ef4444" />
+                    <h1 className={styles.resultTitle}>Processing Error</h1>
+                </div>
+
+                <div className={styles.errorBox}>
+                    <p className={styles.errorText}>{error}</p>
+                </div>
+
+                <p style={{ color: '#888', fontSize: '14px', marginBottom: '24px', textAlign: 'center' }}>
+                    Please try again with a different audio file.
+                </p>
+
+                <div className={styles.controls}>
+                    <button className={styles.resultButton} onClick={onCancel}>
+                        Try Again
+                    </button>
+                </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
 
-// Show error state
-if (error && !isProcessing) {
-    return (
-        <div className={styles.resultContainer}>
-            <div className={styles.resultHeader}>
-                <AlertCircle size={32} color="#ef4444" />
-                <h1 className={styles.resultTitle}>Processing Error</h1>
-            </div>
 
-            <div className={styles.errorBox}>
-                <p className={styles.errorText}>{error}</p>
-            </div>
-
-            <p style={{ color: '#888', fontSize: '14px', marginBottom: '24px', textAlign: 'center' }}>
-                Please try again with a different audio file.
-            </p>
-
-            <div className={styles.controls}>
-                <button className={styles.resultButton} onClick={onCancel}>
-                    Try Again
-                </button>
-            </div>
-        </div>
-    );
-}
-
-    
 
     // Show processing state
     return (
@@ -183,7 +195,7 @@ if (error && !isProcessing) {
                             cx="100"
                             cy="100"
                             r="90"
-                            style={{ 
+                            style={{
                                 strokeDashoffset: 565 - (565 * (progress / 100)),
                                 transition: 'stroke-dashoffset 0.3s ease'
                             }}
@@ -200,8 +212,8 @@ if (error && !isProcessing) {
 
             <div className={styles.controls}>
                 <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
-                    <button 
-                        className={styles.cancelButton} 
+                    <button
+                        className={styles.cancelButton}
                         onClick={onCancel}
                         disabled={!isProcessing}
                         style={{ opacity: isProcessing ? 1 : 0.5 }}
