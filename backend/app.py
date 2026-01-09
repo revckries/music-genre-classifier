@@ -24,7 +24,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Load model
 try:
     # Get the path to the model file (it's in the project root/models/ directory)
-    model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'models', 'gtzan_model.keras')
+    model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models', 'gtzan_model.keras')
     model = keras.models.load_model(model_path)
     print(f"✓ Model loaded successfully from: {model_path}")
 except Exception as e:
@@ -175,9 +175,23 @@ def predict_genre(audio_data, format_hint=None):
         raise Exception(f"Error predicting genre: {str(e)}")
 
 
+
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify({
+        'status': 'Music Genre Classification Backend is Running',
+        'endpoints': {
+            '/predict': 'POST audio file to predict its genre',
+            '/health': 'GET system health status',
+            '/genres': 'GET list of supported genres'
+        }
+    })
+
+
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({'status': 'ok', 'model_loaded': model is not None, 'genres': GENRES})
+
 
 
 @app.route('/predict', methods=['POST'])
